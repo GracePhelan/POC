@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 700px;
+            margin: 40px auto;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        h2 {
+            color: #0078d4;
+        }
+
+        .info {
+            margin-bottom: 20px;
+        }
+
+        .button {
+            padding: 12px 22px;
+            background-color: #0078d4;
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+            .button:hover {
+                background-color: #005a9e;
+            }
+
+        #captcha-container {
+            margin-top: 25px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Expression of Interest – Verification</h2>
+    <p class="info">
+        Before accessing the Expression of Interest form, please verify that you are human.
+    </p>
+
+    <button class="button" onclick="showCaptcha()">Continue</button>
+
+    <div id="captcha-container">
+        <div class="cf-turnstile"
+             data-sitekey="0x4AAAAAACyhazeVuIswJFja"
+             data-callback="onCaptchaPassed">
+        </div>
+    </div>
+
+    <script>
+
+function showCaptcha() {
+    document.getElementById("captcha-container").style.display = "block";
+}
+
+function onCaptchaPassed(token) {
+
+    const params = new URLSearchParams(window.location.search);
+    const lag = params.get("Name");
+
+    const formURL = "https://forms.office.com/Pages/ResponsePage.aspx?id=QMGcP7KB8Eywo2c8wWlZ-bGhOLBbrplKj5jcN7SVeUhUOFFZTzhXWTBPMEpINk5NOFZGSUc2VUs2VS4u";
+
+    const redirect = formURL + "&rb72cb488516543b3bb4ffdfebf70d560=" + encodeURIComponent(lag);
+
+    window.location.href = redirect;
+}
+    </script>
+
+</body>
+</html>
