@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,26 +9,29 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 1000px;
+            max-width: 700px;
             margin: 40px auto;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        h2 {
+            color: #0078d4;
         }
 
         .button {
             padding: 12px 22px;
             background-color: #0078d4;
             color: #fff;
+            font-size: 16px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
+            margin-top: 20px;
         }
 
         #captcha-container {
-            margin-top: 20px;
-            display: none;
-        }
-
-        #iframe-container {
-            margin-top: 30px;
+            margin-top: 25px;
             display: none;
         }
     </style>
@@ -44,29 +48,10 @@
 
 <div id="captcha-container"></div>
 
-<div id="iframe-container">
-    <iframe
-        id="form-iframe"
-        frameborder="0"
-        marginwidth="0"
-        marginheight="0"
-        scrolling="no"        
-        style="
-            width: 100%;
-            height: 100vh;
-            border: none;
-            overflow: hidden;
-        "
-        allowfullscreen
-        webkitallowfullscreen
-        mozallowfullscreen
-        msallowfullscreen>
-    </iframe>
-</div>
-
 <script>
 function showCaptcha() {
-    document.getElementById("captcha-container").style.display = "block";
+    const container = document.getElementById("captcha-container");
+    container.style.display = "block";
 
     turnstile.render("#captcha-container", {
         sitekey: "0x4AAAAAACyjYuS7nzfVfYYa",
@@ -76,20 +61,17 @@ function showCaptcha() {
 
 function onCaptchaPassed(token) {
     const params = new URLSearchParams(window.location.search);
-    const name = params.get("Name") || "";
+    const lag = params.get("Name") || "";
 
-    const iframeSrc =
-        "https://forms.office.com/Pages/ResponsePage.aspx" +
-        "?id=QMGcP7KB8Eywo2c8wWlZ-bGhOLBbrplKj5jcN7SVeUhUOFFZTzhXWTBPMEpINk5NOFZGSUc2VUs2VS4u" +
-        "&embed=true" +
+    const formURL =
+        "https://forms.office.com/Pages/ResponsePage.aspx?id=QMGcP7KB8Eywo2c8wWlZ-bGhOLBbrplKj5jcN7SVeUhUOFFZTzhXWTBPMEpINk5NOFZGSUc2VUs2VS4u";
+
+    const redirect =
+        formURL +
         "&rfea9ab1403bc4d0489621ff751363c36=" +
-        encodeURIComponent(name);
+        encodeURIComponent(lag);
 
-    const iframe = document.getElementById("form-iframe");
-    iframe.src = iframeSrc;
-
-    document.getElementById("iframe-container").style.display = "block";
-    document.getElementById("captcha-container").style.display = "none";
+    window.location.href = redirect;
 }
 </script>
 
