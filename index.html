@@ -18,10 +18,6 @@
             color: #0078d4;
         }
 
-        .info {
-            margin-bottom: 20px;
-        }
-
         .button {
             padding: 12px 22px;
             background-color: #0078d4;
@@ -33,10 +29,6 @@
             margin-top: 20px;
         }
 
-            .button:hover {
-                background-color: #005a9e;
-            }
-
         #captcha-container {
             margin-top: 25px;
             display: none;
@@ -45,39 +37,42 @@
 </head>
 <body>
 
-    <h2>Expression of Interest – Verification</h2>
-    <p class="info">
-        Before accessing the Expression of Interest form, please verify that you are human.
-    </p>
+<h2>Expression of Interest – Verification</h2>
 
-    <button class="button" onclick="showCaptcha()">Continue</button>
+<p>
+    Before accessing the Expression of Interest form, please verify that you are human.
+</p>
 
-    <div id="captcha-container">
-        <div class="cf-turnstile"
-             data-sitekey="0x4AAAAAACyjYuS7nzfVfYYa"
-             data-mode="managed"
-             data-callback="onCaptchaPassed">
-        </div>
-    </div>
+<button class="button" onclick="showCaptcha()">Continue</button>
 
-    <script>
+<div id="captcha-container"></div>
 
+<script>
 function showCaptcha() {
-    document.getElementById("captcha-container").style.display = "block";
+    const container = document.getElementById("captcha-container");
+    container.style.display = "block";
+
+    turnstile.render("#captcha-container", {
+        sitekey: "0x4AAAAAACyjYuS7nzfVfYYa",
+        callback: onCaptchaPassed
+    });
 }
 
 function onCaptchaPassed(token) {
-
     const params = new URLSearchParams(window.location.search);
-    const lag = params.get("Name");
+    const lag = params.get("Name") || "";
 
-    const formURL = "https://forms.office.com/Pages/ResponsePage.aspx?id=QMGcP7KB8Eywo2c8wWlZ-bGhOLBbrplKj5jcN7SVeUhUOFFZTzhXWTBPMEpINk5NOFZGSUc2VUs2VS4u";
+    const formURL =
+        "https://forms.office.com/Pages/ResponsePage.aspx?id=QMGcP7KB8Eywo2c8wWlZ-bGhOLBbrplKj5jcN7SVeUhUOFFZTzhXWTBPMEpINk5NOFZGSUc2VUs2VS4u";
 
-    const redirect = formURL + "&rb72cb488516543b3bb4ffdfebf70d560=" + encodeURIComponent(lag);
+    const redirect =
+        formURL +
+        "&rb72cb488516543b3bb4ffdfebf70d560=" +
+        encodeURIComponent(lag);
 
     window.location.href = redirect;
 }
-    </script>
+</script>
 
 </body>
 </html>
